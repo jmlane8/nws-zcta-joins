@@ -1,0 +1,41 @@
+# Core
+jupyterlab==4.2.5
+pandas==2.2.3
+numpy==2.1.3
+matplotlib==3.9.2
+pyarrow==22.0.0
+geoalchemy2==0.18.0
+
+# Geo stack (vector)
+geopandas==1.0.1
+shapely==2.0.6
+pyogrio==0.9.0
+rtree==1.3.0
+pyproj==3.6.1
+fiona==1.10.1
+gdal==3.9.2
+
+# DuckDB (Python API) + spatial bindings
+duckdb==1.1.0
+duckdb-engine==0.11.1
+
+# DB connectivity (optional)
+SQLAlchemy==2.0.35
+psycopg[binary]
+
+# Raster / Zarr (Phase 2)
+xarray==2024.7.0
+rioxarray==0.17.0
+rasterio==1.4.1
+regionmask==0.12.1
+dask==2024.8.2
+
+# Spark + Sedona
+pyspark==4.0.1
+apache-sedona==1.8.0
+
+# Jupyter extensions & profiling
+jupyter-server-proxy==4.1.2
+ipython-sql==0.5.0
+memory-profiler==0.61.0
+line-profiler==4.1.3

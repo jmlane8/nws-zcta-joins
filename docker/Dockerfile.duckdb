@@ -1,0 +1,14 @@
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gdal-bin libgdal-dev libgeos-dev proj-bin libproj-dev build-essential \
+    bash curl unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /data
+
+RUN pip install --upgrade pip \
+ && pip install duckdb==1.1.0 duckdb-engine==0.11.1
+
+# Default: start Python with DuckDB ready
+CMD ["python", "-c", "import duckdb; con = duckdb.connect('/data/mydb.duckdb'); print('DuckDB ready')"]

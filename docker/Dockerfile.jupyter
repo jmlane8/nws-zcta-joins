@@ -1,0 +1,28 @@
+# docker/Dockerfile.jupyter
+FROM python:3.13-slim
+
+# System deps for GDAL/GEOS/Proj
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake ninja-build \
+    libssl-dev libffi-dev python3-dev libpq-dev gcc \
+    gdal-bin libgdal-dev libgeos-dev proj-bin libproj-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update -y && apt-get install -y   openjdk-21-jre openjdk-21-jdk-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+# Ensure GDAL/Proj are visible to wheels
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+ENV GDAL_DATA=/usr/share/gdal
+ENV PROJ_LIB=/usr/share/proj
+
+WORKDIR /workspace
+COPY requirements-jupyter.txt /tmp/requirements.txt
+
+RUN pip install --upgrade pip \
+ && pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Jupyter defaults
+EXPOSE 8888
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--NotebookApp.token="]
