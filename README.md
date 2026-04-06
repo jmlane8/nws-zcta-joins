@@ -1,6 +1,6 @@
 # 🗺️ GeoJoin Project
 
-This project (and ReadMe.md) was completed with the help of ChatGPT 5.1, Copilot and Gemini.
+This project (and ReadMe.md) was completed with the help of ChatGPT 5.1, Copilot, Gemini and Claude (H3 sections).
 
 
 ## Overview
@@ -13,6 +13,7 @@ The goal is to experiment with three complementary technologies **inside Jupyter
 | **PostgreSQL + PostGIS** | The classic spatial database, providing accurate geometry operations and a mature spatial SQL dialect. |
 | **Apache Sedona (Spark)** | A distributed geospatial framework for running spatial joins and transformations on large datasets. |
 | **DuckDB + Spatial Extension** | A lightweight, single-file analytical database that can read GeoParquet directly and run spatial SQL locally. |
+| **H3 (Uber Hexagonal Grid)** | A discrete global grid system that converts polygons into hexagonal cell IDs and joins on shared cells — a fundamentally different, approximate approach. |
 
 These tools will be tested using real public data:
 - **ZCTAs (ZIP Code Tabulation Areas)** from the U.S. Census Bureau  
@@ -99,5 +100,10 @@ DuckDB Spatial: USING RTREE index on geometry.
 
 So conceptually, all three rely on some flavor of bounding-box–based tree (R-tree-ish) as the first-stage spatial pruning, then do exact geometry tests like ST_Intersects or ST_Intersection as refinement.
 
+H3: No R-tree. Instead, each polygon is converted ("polyfilled") into a set of hexagonal cell IDs at a chosen resolution. The spatial join becomes a set intersection of integers — no geometry math at query time. The trade-off is that results are approximate: accuracy improves with higher resolution at the cost of more cells to store and join.
+
+H3 is an approximate join via discretization.
+
 ## Discussion
-PostGIS was the fastest to perform the geojoin. DuckDB and PostGIS were easy to set up. Getting the right versions for Spark, Sedona and Java was new for me.
+H3 in DuckDB was the fastest (under 100 ms, H3 alone under 300 ms,PostGIS was 400 ms). H3 alone and H3 in DuckDB had fewer successful joins than the R-tree methods (2264 and 2080 vs 2928).
+PostGIS was the faster to perform the geojoin the the R-tree like joins (DuckDB and Sedona) DuckDB and PostGIS were easy to set up. Getting the right versions for Spark, Sedona and Java was new for me.

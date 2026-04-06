@@ -19,6 +19,9 @@ gdal==3.9.2
 duckdb==1.1.0
 duckdb-engine==0.11.1
 
+# H3 hexagonal grid
+h3==4.1.0
+
 # DB connectivity (optional)
 SQLAlchemy==2.0.35
 psycopg[binary]
